@@ -1,0 +1,449 @@
+Unit          Routines       Description
+-----------------------------------------------------------------------
+utypes        SetErrCode     Sets error code
+*             DefaultVal     Sets error code and default function value
+*             MathErr        Returns the error code
+*             DimVector      Allocates a real vector
+*             DimIntVector   Allocates an integer vector
+*             DimCompVector  Allocates a complex vector
+*             DimBoolVector  Allocates a boolean vector
+*             DimStrVector   Allocates a string vector
+*             DimMatrix      Allocates a real matrix
+*             DimIntMatrix   Allocates an integer matrix
+*             DimCompMatrix  Allocates a complex matrix
+*             DimBoolMatrix  Allocates a boolean matrix
+*             DimStrMatrix   Allocates a string matrix
+*             Dim3DMatrix      Allocates a real 3Dmatrix
+*             Dim3DIntMatrix   Allocates an integer 3Dmatrix
+*             Dim3DCompMatrix  Allocates a complex 3Dmatrix
+*             Dim3DBoolMatrix  Allocates a boolean 3Dmatrix
+*             Dim3DStrMatrix   Allocates a string 3Dmatrix
+*             DelVector      Deallocates a real vector
+*             DelIntVector   Deallocates an integer vector
+*             DelCompVector  Deallocates a complex vector
+*             DelBoolVector  Deallocates a boolean vector
+*             DelStrVector   Deallocates a string vector
+*             DelMatrix      Deallocates a real matrix
+*             DelIntMatrix   Deallocates an integer matrix
+*             DelCompMatrix  Deallocates a complex matrix
+*             DelBoolMatrix  Deallocates a boolean matrix
+*             DelStrMatrix   Deallocates a string matrix
+*             Del3DMatrix      Deallocates a real 3Dmatrix
+*             Del3DIntMatrix   Deallocates an integer 3Dmatrix
+*             Del3DCompMatrix  Deallocates a complex 3Dmatrix
+*             Del3DBoolMatrix  Deallocates a boolean 3Dmatrix
+*             Del3DStrMatrix   Deallocates a string 3Dmatrix
+uminmax       FMin           Minimum of 2 reals
+*             FMax           Maximum of 2 reals
+*             IMin           Minimum of 2 integers
+*             IMax           Maximum of 2 integers
+*             Sgn            Sign, Sgn(0) = 1
+*             Sgn0           Sign, Sgn(0) = 0
+*             DSgn           DSgn(A, B) = Sgn(B) * |A|
+*             FSwap          Exchanges 2 reals
+*             ISwap          Exchanges 2 integers
+*             min3	     Minimum of 3 reals
+*             min3I	     Minimum of 3 integers
+*             Max3           Maximum of 3 reals
+*             Max3I          Maximum of 3 integers  
+uround        RoundN         Rounds a number to N decimal places
+*             Ceil           Ceiling function
+*             Floor          Floor function
+umath         Expo           Exponential (with bound checking)
+*             Exp2           Exponential, base 2
+*             Exp10          Exponential, base 10
+*             Log            Natural log (with bound checking)
+*             Log2           Log, base 2
+*             Log10          Log, base 10
+*             LogA           Log, base A
+*             IntPower       Power (integer exponent)
+*             Power          Power (real exponent)
+utrigo        Pythag         Sqrt(X^2 + Y^2) 
+*             FixAngle       Set argument in -Pi..Pi 
+*             Tan            Tangent
+*             ArcSin         Arc sinus
+*             ArcCos         Arc cosinus
+*             ArcTan2        Angle (Ox, OM) with M(X,Y)
+uhyper        Sinh           Hyperbolic sine
+*             Cosh           Hyperbolic cosine
+*             Tanh           Hyperbolic tangent
+*             ArcSinh        Inverse hyperbolic sine
+*             ArcCosh        Inverse hyperbolic cosine
+*             ArcTanh        Inverse hyperbolic tangent
+*             SinhCosh       Sinh and Cosh
+upolev        PolEvl         Polynomial evaluation (coeff. of x^n <> 1)
+*             P1Evl          Polynomial evaluation (coeff. of x^n = 1)
+ugamma        Gamma          Gamma function
+*             LnGamma        Logarithm of Gamma function
+*             SgnGamma       Sign of Gamma function
+*             Stirling       Stirling's formula for Gamma
+*             StirLog        Stirling's formula for LnGamma
+udigamma      DiGamma        DiGamma function
+*             TriGamma       TriGamma function
+uigamma       IGamma         Incomplete Gamma function
+*             JGamma         Complement of incomplete Gamma function
+*             Erf            Error function
+*             Erfc           Complement of error function
+*             Normal_Distribution
+*             Poisson_Distribution
+*             Cauchy_Distribution
+ubeta         Beta           Beta function
+uibeta        IBeta          Incomplete Beta function
+*             Student_Distribution 
+*             F_Distribution
+*             Cumulative_Binomial_Distribution
+ulambert      LambertW       Lambert's W-function
+ufact         Fact           Factorial
+ubinom        Binomial       Binomial coefficient
+*             PBinom         Probability of binomial distribution
+upoidist      PPoisson       Probability of Poisson distribution
+uexpdist      DExpo          Density of exponential distribution
+*             FExpo          Cumulative prob. of exponential dist.
+unormal       DNorm          Density of standard normal distribution
+ugamdist      DBeta          Density of Beta distribution
+*             DGamma         Density of Gamma distribution
+*             DKhi2          Density of Khi-2 distribution
+*             DStudent       Density of Student's distribution
+*             DSnedecor      Density of Fisher-Snedecor distribution
+*             ChiSquareProbability
+*             ChiSquareProbabilityCompl
+uibtdist      FBeta          Cumulative prob. of Beta distribution
+*             FBinom         Cumulative prob. of Binomial distribution
+*             FStudent       Cumulative prob. of Student's distribution
+*             PStudent       Prob(|t| > X) for Student's distribution
+*             FSnedecor      Cumulative prob. of Fisher-Snedecor distribution
+*             PSnedecor      Prob(F > X) for Fisher-Snedecor distribution
+uigmdist      FGamma         Cumulative prob. of Gamma distribution
+*             FPoisson       Cumulative prob. of Poisson distribution
+*             FNorm          Cumulative prob. of standard normal distribution
+*             PNorm          Prob(|U| > X) for standard normal distribution
+*             FKhi2          Cumulative prob. of Khi-2 distribution
+*             PKhi2          Prob(Khi2 > X) for Khi-2 distribution
+uinvnorm      InvNorm        Inverse of normal distribution
+uinvgam       InvGamma       Inverse of incomplete Gamma function
+*             InvKhi2        Inverse of khi-2 distribution   
+uinvbeta      InvBeta        Inverse of incomplete Beta function
+*             InvStudent     Inverse of Student's t-distribution
+*             InvSnedecor    Inverse of Snedecor's F-distribution
+ucompvec      CompVec        Comparison of two vectors
+ugausjor      GaussJordan    Linear equation system (Gauss-Jordan method)
+*             GaussJordan_Elimination Linear equation solution by Gauss-Jordan elimination
+ulineq        LinEq          Linear equation system (Gauss-Jordan method) 
+ucholesk      Cholesky       Cholesky factorization
+ulu           LU_Decomp      LU decomposition
+*             LU_Solve       Solves a system of equations after LU decomposition
+*             ludcmp         LU decomposition
+*             lubksb         LU Back Scattering
+*             InverseMatrix
+*             TranspondMatrix
+uqr           QR_Decomp      QR decomposition
+*             QR_Solve       Solves a system of equations after QR decomposition
+usvd          SV_Decomp      Singular value decomposition
+*             SV_Solve       Solves a system of equations after SV decomposition
+*             SV_SetZero     Sets the lowest singular values to zero
+*             SV_Approx      Approximates a matrix from its SV decomposition
+ubalance      Balance        Balances a matrix and tries to isolate eigenvalues
+ubalbak       BalBak         Back transformation of eigenvectors 
+uelmhes       ElmHes         Reduction of a square matrix to upper Hessenberg form
+ueltran       Eltran         Save transformations used by ElmHes
+uhqr          Hqr            Eigenvalues of a real upper Hessenberg matrix by the QR method
+uhqr2         Hqr2           Eigenvalues and eigenvectors of a real upper Hessenberg matrix
+ueigval       EigenVals      Eigenvalues of a general square matrix
+ueigvec       EigenVect      Eigenvalues and eigenvectors of a general square matrix
+ujacobi       Jacobi         Eigenvalues and eigenvectors of a symmetric matrix
+uminbrak      MinBrack       Brackets a minimum of a function
+ugoldsrc      GoldSearch     Minimization of a function of 1 variable (Golden Search method)
+ulinmin       LinMin         Minimization of a function of several variables along a line
+unewton       Newton         Minimization of a function of several var. (Newton's method)
+*             SaveNewton     Save Newton iterations in a file
+umarq         Marquardt      Minimization of a function of several var. (Marquardt's method)
+*             SaveMarquardt  Save Marquardt iterations in a file     
+*             Adjust         Adjust of a function with Levenberg-Marquardt's Method
+*             Free_mem_Adjust
+*             Initialize_Adjust
+ubfgs         BFGS           Minimization of a function of several var. (BFGS method)
+*             SaveBFGS       Save BFGS iterations in a file
+usimplex      Simplex        Minimization of a function of several var. (simplex method)
+*             SaveSimplex    Save simplex iterations in a file
+ulinminq      LinMinEq       Minimization of a sum of squared functions along a line
+ubisect       RootBrack      Brackets solution of equation
+*             Bisect         Nonlinear equation (bisection method)
+unewteq       NewtEq         Nonlinear equation (Newton-Raphson method)
+usecant       Secant         Nonlinear equation (secant method)
+unewteqs      NewtEqs        Nonlinear equation system (Newton-Raphson method)
+ubroyden      Broyden        Nonlinear equation system (Broyden's method)
+upolynom      Poly           Evaluates a polynomial
+*             RFrac          Evaluates a rational fraction
+urtpol1       RootPol1       Root of linear equation
+urtpol2       RootPol2       Roots of quadratic equation
+urtpol3       RootPol3       Roots of cubic equation
+urtpol4       RootPol4       Roots of quartic equation
+urootpol      RootPol        Roots of polynomial from companion matrix
+upolutil      SetRealRoots   Set the imaginary part of a root to zero
+*             SortRoots      Sorts the roots of a polynomial
+utrapint      TrapInt        Integration by trapezoidal rule
+ugausleg      GausLeg        Gauss-Legendre integration
+*             GausLeg0       Gauss-Legendre integration (lower bound=0)
+*             Convol         Convolution product
+urkf          RKF45          Integration of a system of differential equations
+ufft          FFT            Fast Fourier Transform
+*             IFFT           Inverse Fast Fourier Transform
+*             FFT_Integer    Fast Fourier Transform for integer data
+*             FFT_Integer_Cleanup  Clear memory after a call to FFT_Integer
+*             CalcFrequency  Direct computation of Fourier Transform
+*             FFTTwo         FFT of two datas simulaneously
+*             RealFFT        FFT of a real data set
+urandom       SetRNG         Select random number generator
+*             InitGen        Initialize random number generator
+*             IRanGen        32-bit random integer in [-2^31 .. 2^31 - 1]
+*             IRanGen31      31-bit random integer in [0 .. 2^31 - 1]
+*             RanGen1        32-bit random real in [0,1]
+*             RanGen2        32-bit random real in [0,1)
+*             RanGen3        32-bit random real in (0,1)
+*             RanGen53       53-bit random real in [0,1)
+uranmwc       InitMWC        Initialize Multiply-With-Carry generator
+*             IRanMWC        32-bit random integer from MWC generator
+uranmt        InitMT         Initialize Mersenne Twister generator with a seed
+*             InitMTbyArray  Initialize MT generator with an array
+*             IRanMT         32-bit random integer from MT generator
+uranuvag      InitUVAG       Initialize UVAG generator with a seed
+*             InitUVAGbyString  Initialize UVAG generator with a string
+*             IRanUVAG       32-bit random integer from UVAG generator
+urangaus      RanGaussStd    Random number from standard normal distribution
+*             RanGauss       Random number from normal distribution
+uranmult      RanMult        Random vector from multinormal distrib. (correlated)
+*             RanMultIndep   Random vector from multinormal distrib. (uncorrelated)
+umcmc         InitMHParams   Initialize Metropolis-Hastings parameters
+*             Hastings       Simulation of a p.d.f. by Metropolis-Hastings
+usimann       InitSAParams   Initialize Simulated Annealing parameters
+*             SA_CreateLogFile  Initialize log file for Simulated Annealing
+*             SimAnn         Minimization of a function of several var. by Simulated Annealing
+ugenalg       InitGAParams   Initialize Genetic Algorithm parameters
+*             GA_CreateLogFile  Initialize log file for Genetic Algorithm
+*             GenAlg         Minimization of a function of several var. by Genetic Algorithm
+umeansd       Mean           Sample mean
+*             StDev          Standard deviation estimated from sample
+*             StDevP         Standard deviation of population
+umedian       Median         Sample median
+uskew         Skewness       Sample skewness 
+*             Kurtosis       Sample kurtosis
+uqsort        QSort          Quick sort (ascending order)
+*             DQSort         Quick sort (descending order)
+*             QSortInt       Quick sort integer vector (ascending order)
+*             DQSortInt      Quick sort integer vector (descending order)
+*             QSortBy        Quick sort by vector (ascending order)
+*             DQSortBy       Quick sort by vector (descending order)
+*             QSortMatrixColumnsByVector,DQSortMatrixColumnsByVector,
+*             QSortMatrixRowsByVector,DQSortMatrixRowsByVector,
+*             QSortMatrixColumnsByIndex,DQSortMatrixColumnsByIndex,
+*             QSortMatrixRowsByIndex,DQSortMatrixRowsByIndex,
+uinterv       Interval       Determines an interval for a set of values
+*             IntAssert      Promotes integer types to int64 and then compare both with the operation specified
+utests	      ProbKS	     function used by Kolgomorov Smirnov test
+*	      Kolgomorov_Smirnov Kolgomorov Smirnov test
+*  	      Kolgomorov_Smirnov_Compara Kolgomorov Smirnov test
+*	      TablaContingencia Tabla de Contingencia
+*	      Pearson	     Pearson test
+* 	      Spearman	     Spearman test
+*  	      Kendall	     Kendall test
+*	      KendallTabla   Kendall Table test
+*	      LegendrePolinomials Legendre Polinomials(l,m,x)
+*	      SphericalHarmonics Spherical Harmonics(l,m,theeta,phi)
+*	      KruskalWallis  Kruskal Wallis test
+*	      Histograma     Computes a Histogram for a PVector
+*	      Histograma2D   Computes a Histogram for a PMatrix
+*	      Histograma3D   Computes a Histogram for a P3DMatrix
+u3dspace      MaximumProjectionInterpolation   float
+*	      MaximumProjectionInterpolationI  integer
+*	      RenderVolume   Calculate the matrix to be showed with several bounds
+*	      RenderVolumeI  integer
+*	      RenderVolume2  Calculate the matrix to be showed not considering 1% lowest values
+*	      RenderVolume2I integer
+*	      SurfaceInterpolation Calculate surface interpolation from a 3dmatrix
+*	      SurfaceInterpolationI Integer
+*	      MatrizdeRotacion get the Euler Rotation Matrix
+*	      Corregistro    Image co-registration using 3 point
+uColorConv    ColorToRGB
+*	      RGBToColor
+*	      RGBToCol
+*	      RGBToHLS
+*	      HLSToRGB
+uConvolution  Convolucion    Convolution and deconvolution of a real data set with a response function
+*	      Correlacion    Correlation between two data sets
+*             SavitzkyGolay  Savitzky Golay low pass smoothing filter
+ufileoperations FMReadFromFile Reads a Float Matrix from a binary file
+*             IMReadFromFile Reads a Integer Matrix from a binary file
+*             BMReadFromFile Reads a Boolean Matrix from a binary file
+*             CMReadFromFile Reads a Complex Matrix from a binary file
+*             SMReadFromFile Reads a String  Matrix from a binary file
+*             FMSaveToFile   Writes a Float   Matrix to binary file
+*             IMSaveToFile   Writes a Integer Matrix to binary file
+*             BMSaveToFile   Writes a Boolean Matrix to binary file
+*             CMSaveToFile   Writes a Complex Matrix to binary file
+*             SMSaveToFile   Writes a String  Matrix to binary file
+*             FMReadFromTextFile Reads a Float Matrix from a text file
+*             IMReadFromTextFile Reads a Integer Matrix from a Text file
+*             BMReadFromTextFile Reads a Boolean Matrix from a Text file
+*             CMReadFromTextFile Reads a Complex Matrix from a Text file
+*             SMReadFromTextFile Reads a String  Matrix from a Text file
+*             FMSaveToTextFile   Writes a Float   Matrix to Text file
+*             IMSaveToTextFile   Writes a Integer Matrix to Text file
+*             BMSaveToTextFile   Writes a Boolean Matrix to Text file
+*             CMSaveToTextFile   Writes a Complex Matrix to Text file
+*             SMSaveToTextFile   Writes a String  Matrix to Text file
+*             bool               result true if argument is different from zero
+*             invbool            result 1 if true and 0 if false
+uinterpolation InRange	     check if a value is in a range
+*             EnsureRange    ensure a value between two values
+*             SpLinealInterpolation lineal interpolation with result between a range
+*             LinealInterpolation 
+*             Lineal2DInterpolation   2 dimensions
+*             Lineal3DInterpolation   3 dimensions
+*             BiLinealInterpolation   Rational 2nd power function interpolation
+*             BiLineal2DInterpolation 2 dimensions
+*             BiLineal3DInterpolation 3 dimensions
+*             PolinomialInterpolation
+*             Polinomial2DInterpolation
+*             Polinomial3DInterpolation
+*             RationalFunctionInterpolation
+*             RationalFunction2DInterpolation
+*             RationalFunction3DInterpolation
+*             Spline         Calculates the 2nd derivative for spline interpolation
+*             Spline2D       2 dimensions
+*             Spline3D       3 dimensions
+*             CubicSplineInterpolation   Performs a Cubic Spline Interpolation
+*             CubicSpline2DInterpolation 2 dimensions
+*             CubicSpline3DInterpolation 3 dimensions
+*             ResizeV        resizes a vector using cubic spline interpolation
+*             ResizeV_Lineal resizes a vector using lineal interpolation
+*             ResizeM        resizes a Matrix using cubic spline interpolation
+*             ResizeM_Lineal resizes a Matrix using lineal interpolation
+*             Resize3DM        resizes a 3DMatrix using cubic spline interpolation
+*             Resize3DM_Lineal resizes a 3DMatrix using lineal interpolation
+*             ResizeIV        resizes an integer vector using cubic spline interpolation
+*             ResizeIV_Lineal resizes an integer vector using lineal interpolation
+*             ResizeIM        resizes an integer Matrix using cubic spline interpolation
+*             ResizeIM_Lineal resizes an integer Matrix using lineal interpolation
+*             Resize3DIM        resizes an integer 3DMatrix using cubic spline interpolation
+*             Resize3DIM_Lineal resizes an integer 3DMatrix using lineal interpolation
+umemory       SystemResources  Get the System resources
+*             GetAppVersion   
+*             GetLocalT
+*             tiempo_en_milisegundos get time in miliseconds
+*             Tiempo_transcurrido    get elapsed time between two tiempo_en_milisegundos calls
+*             CambiaPrioridadaProceso set process priority
+*             CambiaPrioridadaHilo    set thread priority
+*             DameMaximaPrioridad    set Higest priority to current application
+*             DamePrioridadAlta      set High priority to current application
+*             DamePrioridadNormal    set Normal priority to current application
+*             DamePrioridadBaja      set Low priority to current application
+*             DameMinimaPrioridad    set Lowest priority to current application
+*             stripped               strip a character from a string
+*             strippedword           strip a word from a string
+uoperations   FVClone        clone a float vector
+*             IVClone        clone a integer vector
+*             BVClone        clone a boolean vector
+*             CVClone        clone a complex vector
+*             SVClone        clone a string vector
+*             FMClone        clone a float matrix
+*             IMClone        clone a integer matrix
+*             BMClone        clone a boolean matrix
+*             CMClone        clone a complex matrix
+*             SMClone        clone a string matrix
+*             F3DMClone      clone a 3D float matrix
+*             I3DMClone      clone a 3D integer matrix
+*             B3DMClone      clone a 3D boolean matrix
+*             C3DMClone      clone a 3D complex matrix
+*             S3DMClone      clone a 3D string matrix
+*             FMTraspose     Traspose a float matrix
+*             IMTraspose     Traspose a integer matrix
+*             BMTraspose     Traspose a boolean matrix
+*             CMTraspose     Traspose a complex matrix
+*             SMTraspose     Traspose a string matrix
+*             TraspondRows   traspond two rows of a matrix
+*             TraspondColumns   traspond two columns of a matrix
+*             SumaFV         Sum 2 float vectors
+*             SumaIV         Sum 2 Integer vectors
+*             SumaBV         Sum 2 Boolean vectors (OR)
+*             SumaCV         Sum 2 Complex vectors
+*             SumaSV         Sum 2 String vectors (append)
+*             SumaFM         Sum 2 float matrixes
+*             SumaIM         Sum 2 Integer matrixes
+*             SumaBM         Sum 2 Boolean matrixes (OR)
+*             SumaCM         Sum 2 Complex matrixes
+*             SumaSM         Sum 2 String matrixes (append)
+*             SumaF3dM       Sum 2 float 3d matrixes
+*             SumaI3dM       Sum 2 Integer 3d matrixes
+*             SumaB3dM       Sum 2 Boolean 3d matrixes (OR)
+*             SumaC3dM       Sum 2 Complex 3d matrixes
+*             SumaS3dM       Sum 2 String 3d matrixes (append)
+*             RestaFV        Rest 2 float vectors
+*             RestaIV        Rest 2 Integer vectors
+*             RestaBV        Rest 2 Boolean vectors (OR not)
+*             RestaCV        Rest 2 Complex vectors
+*             RestaSV        Rest 2 String vectors (strippedword)
+*             RestaFM        Rest 2 float matrixes
+*             RestaIM        Rest 2 Integer matrixes
+*             RestaBM        Rest 2 Boolean matrixes (OR not)
+*             RestaCM        Rest 2 Complex matrixes
+*             RestaSM        Rest 2 String matrixes (strippedword)
+*             RestaF3dM      Rest 2 float 3d matrixes
+*             RestaI3dM      Rest 2 Integer 3d matrixes
+*             RestaB3dM      Rest 2 Boolean 3d matrixes (OR not)
+*             RestaC3dM      Rest 2 Complex 3d matrixes
+*             RestaS3dM      Rest 2 String 3d matrixes (strippedword)
+*             MultiplyFM     Multiply 2 Float Matrixes
+*             MultiplyIM     Multiply 2 integer Matrixes
+*             MultiplyBM     Multiply 2 boolean Matrixes (AND)
+*             MultiplyCM     Multiply 2 complex Matrixes
+uTypeCasts    FMatrixToVector Converts a matrix(m,n) to a vector(m*n) float
+*							IMatrixToVector integer
+*							BMatrixToVector boolean
+*							SMatrixToVector String
+*							CMatrixToVector Complex
+*							FVectorToMatrix Converts a vector(A) to a matrix(m,n) float { if a<m*n the rest values are set to 0
+*							IVectorToMatrix integer																			{ if a>m*n there are values not considered
+*							BVectorToMatrix boolean																			{ construction begins first trough x then trough y
+*							SVectorToMatrix string																			{ the user must use these functions carefully
+*							CVectorToMatrix complex																			{ trying to use a<=m*n
+*							F3dMatrixToVector Converts a matrix(m,n,o) to a vector(m*n*o) float
+*							I3dMatrixToVector integer
+*							B3dMatrixToVector boolean
+*							S3dMatrixToVector String
+*							C3dMatrixToVector Complex
+*							FVectorTo3dMatrix Converts a vector(A) to a matrix(m,n,o) float { if a<m*n*o the rest values are set to 0
+*							IVectorTo3dMatrix integer																		  	{ if a>m*n*o there are values not considered
+*							BVectorTo3dMatrix boolean																		  	{ construction begins first trough x, then trough y and last trough z
+*							SVectorTo3dMatrix string																		  	{ the user must use these functions carefully
+*							CVectorTo3dMatrix complex																		  	{ trying to use a<=m*n*o
+*             InttoFloatV    typecast an integer vector to a float vector
+*             InttoFloatM    typecast an integer matrix to a float matrix
+*             InttoFloat3DM  typecast an integer 3D matrix to a float 3D matrix
+*							Point3d				 typecasts a 3D Point
+uRomberg      RombergIntT    Romberg integration with trapezoidal rule string input
+*             RombergIntMP   Romberg integration with mid point rule string input 
+*             RombergIntTf   Romberg integration with trapezoidal rule functional input 
+*             RombergIntMPf  Romberg integration with mid point rule functional input
+ucomplex      ComplexCart,ComplexPolar,                          { Complex Typecasts }
+*             CloneComplex   Clones a complex number
+*             SumaComplex    Sum 2 complex numbers
+*             RestaComplex   Rest 2 complex numbers
+*             MultiplyComplex multiply 2 complex numbers
+*             DivideComplex  divide 2 complex numbers
+*             Modulo,ModuloCuadrado  module of a complex number
+*             StrToComplex   typecast a string into complex (+A+Bi)
+*             ComplexToString converts a complex number into string format (+A+Bi)
+*             Multiply,Divide multiplies/divides a complex by a number 
+*             Conjugate      Complex Conjugate
+*             Inversa        1/Z
+*             Compara,IsZero   Boolean checks
+*             ToPolar,ToCartesian  Switch between polar and cartesian modes
+*             Coseno,Seno,ArcoCoseno,ArcoSeno,                 { Complex    }
+*             Cotangente,Tangente,ArcoCotangente,ArcoTangente, { polar      }
+*             Cosecante,Secante,ArcoCosecante,ArcoSecante,     { operations }
+*             CosenoH,SenoH,ArcoCosenoH,ArcoSenoH,
+*             CotangenteH,TangenteH,ArcoCotangenteH,ArcoTangenteH,
+*             CosecanteH,SecanteH,ArcoCosecanteH,ArcoSecanteH, { Complex Hiperbolic operations}
+*             Ln,EXP,LogN,Power,Cuadrado,RaizCuadrada,         { Complex math operations }
+Lazarus installer
+http://ufpr.dl.sourceforge.net/sourceforge/lazarus/Lazarus-0.9.22-fpc-2.0.4-20070326-win32.exe

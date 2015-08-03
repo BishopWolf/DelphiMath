@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2012/08/14 22:34:30.000.081,=rtl.dcp</Transaction>
+    <Transaction>2012/08/14 22:34:33.000.225,=xmlrtl.dcp</Transaction>
+    <Transaction>2012/08/14 22:34:33.000.218,=vclactnband.dcp</Transaction>
+    <Transaction>2012/08/14 22:34:33.000.211,=designide.dcp</Transaction>
+    <Transaction>2012/08/14 22:34:33.000.206,=F:\MCID\tpmat\units\GaugeFloat.pas</Transaction>
+    <Transaction>2012/08/14 22:34:33.000.221,=vclx.dcp</Transaction>
+    <Transaction>2012/08/14 22:34:33.000.215,=vcl.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:28.000.374,=rtl.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:40.000.700,=vclx.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:40.000.686,=designide.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:40.000.702,=xmlrtl.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:40.000.692,=vcl.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:40.000.697,=vclactnband.dcp</Transaction>
+    <Transaction>2012/09/13 21:51:40.000.680,=F:\MCID\tpmat\units\GaugeFloat.pas</Transaction>
+    <Transaction>2012/09/13 21:55:08.000.976,=designide.dcp</Transaction>
+    <Transaction>2012/09/13 22:01:22.000.481,=VclSmp.dcp</Transaction>
+    <Transaction>2012/09/13 22:05:29.000.860,=F:\MCID\tpmat\units\ModelSupport_GaugeFloat\default.txaPackage</Transaction>
+    <Transaction>2012/09/13 22:05:38.000.543,=F:\MCID\tpmat\units\ModelSupport_GaugeFloat\default.txvpck</Transaction>
+    <Transaction>2012/09/13 22:05:39.000.451,=F:\MCID\tpmat\units\ModelSupport_GaugeFloat\GaugeFloat\default.txvpck</Transaction>
+    <Transaction>2012/09/13 22:05:41.000.823,=F:\MCID\tpmat\units\ModelSupport_GaugeFloat\GaugeFloat\default.txaPackage</Transaction>
+  </Transactions>
+</BorlandProject>

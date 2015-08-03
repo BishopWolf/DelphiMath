@@ -1,0 +1,44 @@
+    TPoints3d= array of TPoint3D;
+    T3DModel = Class(TObject)
+    private
+
+      Vertices : array of TVertex;
+      Faces : array of TFace;
+      VisibleFaces : array of TFace;
+
+      FCenter : TPoint3D;
+
+      function FaceNormal(AFace : integer) : TPoint3D;
+      procedure QuickSortFaces(var A: array of TFace; iLo, iHi: Integer);
+      procedure FlatFace(AFace : integer);
+      procedure GouraudFace( AFace : integer);
+      procedure GouraudPoly(var ABitmap : TBitmap ; V : TPointColorTriangle);
+      function CrossProduct(AVector1, AVector2 : TPoint3D) : TPoint3D;
+      function DotProduct(AVector1, AVector2 : TPoint3D) : float;
+      function UnitVector(AVector : TPoint3D) : TPoint3D;
+      function Add(AVec1, AVec2 : TPoint3D) : TPoint3D;
+      function Subtract(AVec1, AVec2 : TPoint3D) : TPoint3D;
+      procedure SearchNearestPoints(Point:integer;out P1,P2,P3:integer);
+      procedure CleanZeroVertices; // included for stability
+      procedure CleanZeroFaces;    // included for speed
+    public
+      procedure limpiate;          // included for frees memory
+      procedure BuildRotationalVolume(Coords, Radius : array of extended ;
+                                      LayerColors : array of TColor ;
+                                      Detail : integer);
+      procedure BuildCube(ACubeSize : integer ; FaceColors : array of TColor);
+      procedure Translate(AX, AY : integer);
+      procedure Rotate(AAngle : float ; AAxis : TAxis);
+      procedure RenderObject;
+      procedure AddVertice(Point : Tpoint3D;Valor:float);
+      procedure ProcessVertices;   // included for 3Dmatrixes process
+      procedure ColorToFaces(min,max:float;r,g,b:array of byte);overload;
+      property Center : TPoint3D read FCenter write FCenter;
+    end;
+
+Var
+  LightSource : TPoint3D; // position of light source
+  SourceDirection : TPoint3D;
+  ViewVector : TPoint3D; // viewing position
+  OffScrBmp : TBitmap; // off screen bitmap for drawing to
+  ScreenRect : TRect;
