@@ -50,12 +50,12 @@ Type
   TMedicalImage = Class Abstract
   Private
     Fdatacreated: boolean;
-    Procedure Setdatacreated(Const Value: boolean);
     Function GetElemento(m, n, o: integer): Float;
-    {$IFDEF INLININGSUPPORTED} Inline;
-    {$ENDIF}
+{$IFDEF INLININGSUPPORTED} Inline;
+{$ENDIF}
     Procedure SetElemento(m, n, o: integer; Const Value: Float);
-    {$IFDEF INLININGSUPPORTED} Inline; {$ENDIF}
+    Procedure SetDataCreated(Const Value: boolean);
+{$IFDEF INLININGSUPPORTED} Inline; {$ENDIF}
   Public
     /// <summary>
     /// This is where the image data is located
@@ -93,7 +93,6 @@ Type
     /// Useful for destroying
     /// </remarks>
     Property datacreated: boolean Read Fdatacreated Write Setdatacreated;
-
     /// <summary>
     /// Initializes or clear a Medical Image Data Instance
     /// </summary>
@@ -154,7 +153,7 @@ Begin
   Data := Another.Data;
   If StealImage Then
   Begin
-    Image := Another.Image;       // faster but dangerous!!
+    Image := Another.Image; // faster but dangerous!!
     Another.datacreated := false; // critical!!!
   End
   Else

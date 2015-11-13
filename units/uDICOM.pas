@@ -143,9 +143,9 @@ Type
     /// Reads all the DICOM images defined by LoadFileList and creates the
     /// Image
     /// </summary>
-    Procedure ReadDICOMDir(Progreso: TGaugeFloat);
+    Procedure ReadDICOMDir(Progreso: TGaugeFloat; readimages: boolean);
     Constructor Create(lFileName: TFileName; Progreso: TGaugeFloat;
-      signed: boolean); Overload;
+      signed, readimage: boolean); Overload;
 
     /// <summary>
     /// Converts the DICOM object into an Interfile one destroying the
@@ -166,7 +166,7 @@ Type
   /// Function to read a DICOM study as Interfile
   /// </summary>
 Function LeeDICOM(lFileName: TFileName; lData: TMedicalImageData;
-  Var Progreso: TGaugeFloat; signed, useData: boolean): TInterfile;
+  Var Progreso: TGaugeFloat; signed, useData, readimage: boolean): TInterfile;
 
 Implementation
 
@@ -196,7 +196,7 @@ Const
 
   { TDICOM }
 
-Procedure TDICOM.ReadDICOMDir(Progreso: TGaugeFloat);
+Procedure TDICOM.ReadDICOMDir(Progreso: TGaugeFloat; readimages: boolean);
 { Reads a DICOM directory and outputs into a data matrix }
 Var
   tempDicomData: TMedicalImageData;
@@ -219,50 +219,53 @@ Var
 Begin
   If gFileList = Nil Then
     LoadFileList(lFileName);
-  If Not datacreated Then
+  data.XYZdim[3] := FileListSz;
+  If readimages Then
   Begin
-    data.XYZdim[3] := FileListSz;
-    DimMatrix(Image, data.XYZdim[1], data.XYZdim[2], data.XYZdim[3]);
-    data.ImageSz := data.XYZdim[1] * data.XYZdim[2] * data.XYZdim[3] *
-      data.Storedbits_per_pixel Div 8;
-    datacreated := true;
-  End;
-  tempDicomData := data;
-  data.MinIntensity := MAX_FLT;
-  data.MaxIntensity := -MAX_FLT;
-  showprogress := (Progreso <> Nil);
-  DimMatrix(tempmatrix, tempDicomData.XYZdim[1], tempDicomData.XYZdim[2], 1);
-  N := gFileList.Count;
-  If showprogress Then
-    InitializeGauge;
-  For k := 1 To N Do
-  Begin
-    lFileName := lStudyPath + gFileList[k - 1];
-    Read_DICOM_HDR(lFileName); // se supone que todos los headers son iguales
-    data.XYZdim[3] := 1;
-    tempmatrix := Read_Image;
-    For i := 1 To data.XYZdim[1] Do
-      For j := 1 To data.XYZdim[2] Do
-      Begin
-        Image[i, j, k] := tempmatrix[i, j];
-      End;
-    If tempDicomData.MinIntensity < data.MinIntensity Then
-      data.MinIntensity := tempDicomData.MinIntensity;
-    If tempDicomData.MaxIntensity > data.MaxIntensity Then
-      data.MaxIntensity := tempDicomData.MaxIntensity;
-    If showprogress Then
+    If Not datacreated Then
     Begin
-      progress := LinealInterpolation(1, Progreso.MinValue, N,
-        Progreso.MaxValue, k);
-      Progreso.updateTime(tiemp0, progress, 'Leyendo directorio...' +
-        gFileList[k - 1]);
+      DimMatrix(Image, data.XYZdim[1], data.XYZdim[2], data.XYZdim[3]);
+      data.ImageSz := data.XYZdim[1] * data.XYZdim[2] * data.XYZdim[3] *
+        data.Storedbits_per_pixel Div 8;
+      datacreated := true;
     End;
+    tempDicomData := data;
+    data.MinIntensity := MAX_FLT;
+    data.MaxIntensity := -MAX_FLT;
+    showprogress := (Progreso <> Nil);
+    DimMatrix(tempmatrix, tempDicomData.XYZdim[1], tempDicomData.XYZdim[2], 1);
+    N := gFileList.Count;
+    If showprogress Then
+      InitializeGauge;
+    For k := 1 To N Do
+    Begin
+      lFileName := lStudyPath + gFileList[k - 1];
+      Read_DICOM_HDR(lFileName); // se supone que todos los headers son iguales
+      data.XYZdim[3] := 1;
+      tempmatrix := Read_Image;
+      For i := 1 To data.XYZdim[1] Do
+        For j := 1 To data.XYZdim[2] Do
+        Begin
+          Image[i, j, k] := tempmatrix[i, j];
+        End;
+      If tempDicomData.MinIntensity < data.MinIntensity Then
+        data.MinIntensity := tempDicomData.MinIntensity;
+      If tempDicomData.MaxIntensity > data.MaxIntensity Then
+        data.MaxIntensity := tempDicomData.MaxIntensity;
+      If showprogress Then
+      Begin
+        progress := LinealInterpolation(1, Progreso.MinValue, N,
+          Progreso.MaxValue, k);
+        Progreso.updateTime(tiemp0, progress, 'Leyendo directorio...' +
+          gFileList[k - 1]);
+      End;
+    End;
+    data.MinIntensitySet := true;
+    data := tempDicomData;
+    DelMatrix(tempmatrix);
+    If showprogress Then
+      FinalizeGauge;
   End;
-  data.MinIntensitySet := true;
-  data := tempDicomData;
-  DelMatrix(tempmatrix);
-  If showprogress Then
-    FinalizeGauge;
 End;
 
 /// <summary>
@@ -315,20 +318,25 @@ End;
 
 Function TDICOM.ToInterfile: TInterfile;
 Begin
-  result := TInterfile.Create(self, true);
+  If datacreated Then
+  Begin
+    result := TInterfile.Create(self, true);
+    If Not result.data.MinIntensitySet Then
+    Begin
+      MinMax(result.Image, 1, result.data.XYZdim[1], 1, result.data.XYZdim[2],
+        1, result.data.XYZdim[3], result.data.MinIntensity,
+        result.data.MaxIntensity);
+      result.data.MinIntensitySet := true;
+    End;
+  End
+  Else
+    result := TInterfile.Create(data, false);
   If result.data.IntenScale = 0 Then
     result.data.IntenScale := 1;
-  If Not result.data.MinIntensitySet Then
-  Begin
-    MinMax(result.Image, 1, result.data.XYZdim[1], 1, result.data.XYZdim[2], 1,
-      result.data.XYZdim[3], result.data.MinIntensity,
-      result.data.MaxIntensity);
-    result.data.MinIntensitySet := true;
-  End;
   result.ImageFileName := ChangeFileExt(lFileName, '.img');
   result.data.ImageStart := 0;
-  result.datacreated := datacreated;
-  datacreated := false;
+  // result.datacreated := datacreated;
+  // datacreated := false;
 End;
 
 // begin elscint
@@ -1314,17 +1322,17 @@ Begin
 End;
 
 Constructor TDICOM.Create(lFileName: TFileName; Progreso: TGaugeFloat;
-  signed: boolean);
+  signed, readimage: boolean);
 Begin
   self.lFileName := lFileName;
   Read_DICOM_HDR(lFileName);
   data.signed := signed; // DICOM is always signed???
   If (data.XYZdim[3] <= 1) Then
   Begin
-    ReadDICOMDir(Progreso);
+    ReadDICOMDir(Progreso, readimage);
     data.XYZdim[3] := gFileList.Count;
   End
-  Else
+  Else If readimage Then
   Begin
     Image := Read_Image3D;
     datacreated := true;
@@ -7973,7 +7981,7 @@ Begin
 End;
 
 Function LeeDICOM(lFileName: TFileName; lData: TMedicalImageData;
-  Var Progreso: TGaugeFloat; signed, UseData: boolean): TInterfile;
+  Var Progreso: TGaugeFloat; signed, useData, readimage: boolean): TInterfile;
 Var
   tempDICOM: TDICOM;
   tiempo0, i, j, k: integer;
@@ -7992,42 +8000,46 @@ Var
   End;
 
 Begin
-  tempDICOM := TDICOM.Create(lFileName, Progreso, signed);
+  tempDICOM := TDICOM.Create(lFileName, Progreso, signed, readimage);
   result := tempDICOM.ToInterfile;
   tempDICOM.Free;
   If useData Then
   Begin
+    result.data.little_endian := lData.little_endian;
     result.data.IntenScale := lData.IntenScale;
     result.data.IntenIntercept := lData.IntenIntercept;
-  End;
-  If (Progreso <> Nil) Then
-  Begin
-    tiempo0 := InitializeGauge;
-    For i := 1 To result.data.XYZdim[1] Do
+    If readimage Then
     Begin
-      For j := 1 To result.data.XYZdim[2] Do
-        For k := 1 To result.data.XYZdim[3] Do
-          result[i, j, k] := result.data.IntenIntercept +
-            (result.data.IntenScale * result[i, j, k]);
-      Progreso.updateTime(tiempo0, LinealInterpolation(1, Progreso.MinValue,
-        result.data.XYZdim[1], Progreso.MaxValue, i), 'Escalando...');
+      If (Progreso <> Nil) Then
+      Begin
+        tiempo0 := InitializeGauge;
+        For i := 1 To result.data.XYZdim[1] Do
+        Begin
+          For j := 1 To result.data.XYZdim[2] Do
+            For k := 1 To result.data.XYZdim[3] Do
+              result[i, j, k] := result.data.IntenIntercept +
+                (result.data.IntenScale * result[i, j, k]);
+          Progreso.updateTime(tiempo0, LinealInterpolation(1, Progreso.MinValue,
+            result.data.XYZdim[1], Progreso.MaxValue, i), 'Escalando...');
+        End;
+        FinalizeGauge;
+      End
+      Else
+      Begin
+        For i := 1 To result.data.XYZdim[1] Do
+          For j := 1 To result.data.XYZdim[2] Do
+            For k := 1 To result.data.XYZdim[3] Do
+              result[i, j, k] := result.data.IntenIntercept +
+                (result.data.IntenScale * result[i, j, k]);
+      End;
+      result.data.MinIntensity := result.data.IntenIntercept +
+        (result.data.IntenScale * result.data.MinIntensity);
+      result.data.MaxIntensity := result.data.IntenIntercept +
+        (result.data.IntenScale * result.data.MaxIntensity);
+      result.data.IntenIntercept := 0;
+      result.data.IntenScale := 1;
     End;
-    FinalizeGauge;
-  End
-  Else
-  Begin
-    For i := 1 To result.data.XYZdim[1] Do
-      For j := 1 To result.data.XYZdim[2] Do
-        For k := 1 To result.data.XYZdim[3] Do
-          result[i, j, k] := result.data.IntenIntercept +
-            (result.data.IntenScale * result[i, j, k]);
   End;
-  result.data.MinIntensity := result.data.IntenIntercept +
-    (result.data.IntenScale * result.data.MinIntensity);
-  result.data.MaxIntensity := result.data.IntenIntercept +
-    (result.data.IntenScale * result.data.MaxIntensity);
-  result.data.IntenIntercept := 0;
-  result.data.IntenScale := 1;
 End;
 
 End.

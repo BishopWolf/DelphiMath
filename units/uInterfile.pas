@@ -108,8 +108,8 @@ Type
   End;
 
 Function LeeMedicalImage_asInterfile(FileName: TFileName;
-  Data: TMedicalImageData; Progreso: TGaugeFloat; IsRaw, UseData: boolean)
-  : TInterfile;
+  Data: TMedicalImageData; Progreso: TGaugeFloat;
+  IsRaw, UseData, readimage: boolean): TInterfile;
 
 Implementation
 
@@ -817,7 +817,7 @@ Var
   I, j, k: integer;
   showprogress: boolean;
   ftemp: File;
-  n, RecSize, tiemp0, ni: LongInt;
+  n, RecSize, tiemp0, ni: longint;
   progress: Float;
   shortinttemp: ShortIntp0;
   bytetemp: Bytep0;
@@ -1179,7 +1179,7 @@ Begin
 End;
 
 Function LeeMedicalImage_asInterfile(FileName: TFileName;
-  Data: TMedicalImageData; Progreso: TGaugeFloat; IsRaw, UseData: boolean)
+  Data: TMedicalImageData; Progreso: TGaugeFloat; IsRaw, UseData, readimage: boolean)
   : TInterfile;
 Var
   Temp: TInterfile;
@@ -1188,7 +1188,7 @@ Begin
   extension := GetFileExt(FileName);
   If (StrCompare(extension, 'HDR')) Or (StrCompare(extension, 'H33')) Then
   Begin // Interfile/Analyze
-    If useData Then
+    If UseData Then
       Temp := TInterfile.Create(Data, FileName, Progreso)
     Else
       Temp := TInterfile.Create(FileName, Progreso);
@@ -1206,7 +1206,7 @@ Begin
   End
   Else // If (StrCompare(extension, 'DCM') OR (extension = '')) Then
   Begin // DICOM
-    Temp := LeeDICOM(FileName, Data, Progreso, true, UseData);
+    Temp := LeeDICOM(FileName, Data, Progreso, true, UseData, readimage);
   End;
   result := Temp;
 End;

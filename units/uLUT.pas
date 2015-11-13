@@ -10,24 +10,27 @@ Type
   TLUT = Record
   Private
     lut_arr: Array [byte] Of TRGBTriple;
+    FName: String;
     Function FMaxColor: COLORREF;
     Function FMinColor: COLORREF;
     Procedure FireLUT(lIntensity, lTotal: integer; index: byte);
     Procedure loadRGB(ind, lR, lG, lB: byte);
     Function GetElemento(ind: byte): TRGBTriple;
     Procedure SetElemento(ind: byte; Const Value: TRGBTriple);
+    procedure SetName(const Value: String);
   Public
     Property Elemento[ind: byte]: TRGBTriple Read GetElemento
       Write SetElemento; Default;
+    Property Name: String read FName write SetName;
     Procedure LoadColorScheme(lStr: String; lScheme: integer);
     Property MinColor: COLORREF Read FMinColor;
     Property MaxColor: COLORREF Read FMaxColor;
     Function Color(lindex: byte): COLORREF;
   End;
 
-implementation
+Implementation
 
-uses ustrings, math, utypes, uConstants;
+Uses ustrings, math, utypes, uConstants;
 
 { TLUT }
 
@@ -40,7 +43,7 @@ End;
 Procedure TLUT.FireLUT(lIntensity, lTotal: integer; index: byte);
 // Generates a 'hot metal' style color lookup table
 Var
-  l255scale : integer;
+  l255scale: integer;
   lR, lG, lB: byte;
 Begin
   l255scale := round(lIntensity / lTotal * 255);
@@ -86,14 +89,14 @@ Procedure TLUT.LoadColorScheme(lStr: String; lScheme: integer);
 Const
   UNIXeoln = chr(10);
 Var
-  lF                                : textfile;
-  lBuff                             : bytep0;
-  lFdata                            : File;
-  lCh                               : char;
-  lNumStr                           : String;
-  lZ                                : integer;
+  lF: textfile;
+  lBuff: bytep0;
+  lFdata: File;
+  lCh: char;
+  lNumStr: String;
+  lZ: integer;
   lByte, lindex, lRed, lBlue, lGreen: byte;
-  lType, lIndx, lLong, lR, lG, lB   : boolean;
+  lType, lIndx, lLong, lR, lG, lB: boolean;
   Procedure ResetBools;
   Begin
     lType := false;
@@ -241,5 +244,10 @@ Begin
   lut_arr[ind].rgbtGreen := Value.rgbtGreen;
   lut_arr[ind].rgbtBlue := Value.rgbtBlue;
 End;
+
+procedure TLUT.SetName(const Value: String);
+begin
+  FName := Value;
+end;
 
 End.

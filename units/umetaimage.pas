@@ -65,10 +65,12 @@ Type
   TMetaImage = Class(TInterfile) // inherits from uInterfile
   Private
     FHeader: AMIHdr;
+    FDatachanged: boolean;
     Procedure Preassign;
     Procedure ClearHdr(instancecreated: boolean);
     Procedure FillCommonHdr;
     Procedure FillHdr;
+    procedure SetDatachanged(const Value: boolean);
   Protected
     Procedure Read_hdr(Var lHdrOK, lImageFormatOK: boolean; Var lDynStr: String;
       filename: TFileName); Reintroduce; // Override;
@@ -101,13 +103,14 @@ Type
       StealImage: boolean = false); Overload;
 
     Destructor Destroy; Override; // overload;
-    Function Write_hdr(lHdrName, lImgName: TFileName): boolean; Reintroduce;
+    Function Write_hdr(lHdrName: TFileName): boolean; Reintroduce;
     // Override;
     /// <summary>
     /// Creates an Interfile Image in the hard disk
     /// </summary>
     Procedure SaveToFile(filename: TFileName; Progreso: TGaugeFloat;
       lUnit: float = 1);
+    property Datachanged:boolean read FDatachanged write SetDatachanged;
   End;
 
 Function LeeMetaImage(lFileName: TFileName; Var Progreso: TGaugeFloat)
@@ -226,6 +229,7 @@ Begin
   FHeader.ElementType := MET_NONE;
   FHeader.ElementDataFile := '';
   FHeader.instantiated := false;
+  Datachanged:=true;
 End;
 
 Procedure TMetaImage.Preassign;
@@ -252,6 +256,7 @@ Var
 Begin
   lFileName := HeaderName;
   datacreated := false;
+  Datachanged:=true;
   Read_hdr(HdrOK, ImgOK, lDynStr, lFileName);
   FillCommonHdr;
   If HdrOK And Not readData Then
@@ -276,6 +281,7 @@ Constructor TMetaImage.Create(Another: TMedicalImageData; lImgName: TFileName;
   Progreso: TGaugeFloat);
 Begin
   Data := Another;
+  Datachanged:=true;
   FillHdr;
   ImageFileName := lImgName;
   Read_Image(ExtractFilePath(lImgName), Progreso);
@@ -285,6 +291,7 @@ End;
 Constructor TMetaImage.Create(Another: TMedicalImageData; Initialize: boolean);
 Begin
   Data := Another;
+  Datachanged:=true;
   FillHdr;
   ImageFileName := '';
   If Initialize Then
@@ -299,6 +306,7 @@ End;
 Constructor TMetaImage.Create(Another: TMedicalImage; StealImage: boolean);
 Begin
   Inherited Create(Another, StealImage);
+  Datachanged:=true;
   FillHdr;
 End;
 
@@ -351,6 +359,7 @@ Begin
     ImageFileName := FHeader.ElementDataFile;
     If FHeader.NDims >= 3 Then
       Data.spacing := FHeader.ElementSpacing[3];
+    Datachanged:=false;
   End;
 End;
 
@@ -430,6 +439,7 @@ Begin
     FHeader.CenterOfRotation[i] := Data.XYZdim[i] / 2;
   End;
   FHeader.ElementDataFile := ImageFileName;
+  Datachanged:=false;
 End;
 
 Procedure TMetaImage.Read_hdr(Var lHdrOK, lImageFormatOK: boolean;
@@ -618,6 +628,7 @@ Begin
   lImageFormatOK := (FHeader.ElementDataFile = 'LOCAL') Or
     FileExists(ExtractFilePath(filename) + FHeader.ElementDataFile);
   lDynStr := FHeader.Comment;
+  Datachanged:=false;
 End;
 
 Procedure TMetaImage.SaveToFile(filename: TFileName; Progreso: TGaugeFloat;
@@ -627,14 +638,19 @@ Begin
   ImageFileName := changeFileExt(filename, '.raw');
   FHeader.ElementMin := FHeader.ElementMin / lUnit;
   FHeader.ElementMax := FHeader.ElementMax / lUnit;
-  If Write_hdr(changeFileExt(filename, '.mhd'), ImageFileName) Then
+  If Write_hdr(changeFileExt(filename, '.mhd')) Then
   Begin
     // lFileName := extractfilename(lFileName);
     Write_Image(ImageFileName, Progreso, lUnit);
   End;
 End;
 
-Function TMetaImage.Write_hdr(lHdrName, lImgName: TFileName): boolean;
+procedure TMetaImage.SetDatachanged(const Value: boolean);
+begin
+  FDatachanged := Value;
+end;
+
+Function TMetaImage.Write_hdr(lHdrName: TFileName): boolean;
 Var
   f: textfile;
   line: String;
@@ -651,6 +667,8 @@ Var
 Begin
   If FHeader.instantiated Then
   Begin
+    if Datachanged then
+       FillHdr;
     AssignFile(f, lHdrName);
     SetLineBreakStyle(f, tlbsLF);
     Rewrite(f);
